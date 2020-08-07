@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,17 +23,20 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     private SignInButton signBtn;
+    private GoogleSignInClient mGoogle;
     EditText mail, pass;
     Button btnIn;
     TextView tvReg;
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthList;
+    private int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        signBtn = findViewById(R.id.sign_in);
         mAuth = FirebaseAuth.getInstance();
         mail = findViewById(R.id.et_mail);
         pass = findViewById(R.id.et_pass);
@@ -87,6 +92,19 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogle = GoogleSignIn.getClient(this, gso);
+
+        signBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+
         tvReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +112,11 @@ public class Login extends AppCompatActivity {
                 startActivity(intReg);
             }
         });
+    }
+
+    private void signIn() {
+        Intent signInt = mGoogle.getSignInIntent();
+        startActivityForResult(signInt, RC_SIGN_IN);
     }
 
     @Override
