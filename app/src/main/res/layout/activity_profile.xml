@@ -6,4 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/pp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@drawable/blank" />
+
+
+    <Button
+        android:id="@+id/btn_edt"
+        android:layout_width="210dp"
+        android:layout_height="51dp"
+        android:text="Edit Profile"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="168dp"
+        tools:layout_editor_absoluteY="76dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
@@ -24,6 +25,7 @@ public class Login extends AppCompatActivity {
 
     private SignInButton signBtn;
     private GoogleSignInClient mGoogle;
+    private String TAG = "Login";
     EditText mail, pass;
     Button btnIn;
     TextView tvReg;

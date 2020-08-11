@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile_feed"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/ic_launcher_background"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UserName"
+            android:layout_toRightOf="@+id/iv_profile_feed"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="15dp"/>
+        <ImageView
+            android:id="@+id/iv_feed_pic"
+            android:layout_width="500dp"
+            android:layout_height="400dp"
+            android:layout_below="@+id/iv_profile_feed"
+            android:src="@drawable/ic_launcher_background"/>
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_love_feed"
+            android:layout_below="@+id/iv_feed_pic"/>
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_comment_feed"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/btn_love_feed"
+            android:layout_below="@+id/iv_feed_pic"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Liked By"
+            android:id="@+id/tv_likedby"
+            android:layout_below="@id/btn_love_feed"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uname Capt"
+            android:textStyle="bold"
+            android:id="@+id/tv_uname_capt"
+            android:layout_below="@+id/tv_likedby"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="caption"
+            android:layout_toRightOf="@+id/tv_uname_capt"
+            android:layout_below="@id/btn_love_feed"
+            android:layout_marginTop="19dp"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Comment.."
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".SetUp">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_pro_set_up_pic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Profile Picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="116dp" />
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
@@ -83,7 +101,7 @@
 
     <Button
         android:id="@+id/btn_done"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Done"

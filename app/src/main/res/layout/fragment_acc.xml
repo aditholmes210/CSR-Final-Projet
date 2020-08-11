@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AccFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="700dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_pro_pict"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/tv_total_posts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_update_profile"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="31dp"
+                android:layout_toRightOf="@+id/iv_pro_pict"
+                android:text="10 Posts"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_total_followers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_update_profile"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="31dp"
+                android:layout_toRightOf="@+id/tv_total_posts"
+                android:text="10 Followers"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_total_followings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_update_profile"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="23dp"
+                android:layout_marginBottom="29dp"
+                android:layout_toRightOf="@+id/tv_total_followers"
+                android:text="10 Following"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_pro_uname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_total_followers"
+                android:layout_alignStart="@+id/tv_total_followers"
+                android:layout_marginStart="-54dp"
+                android:layout_marginBottom="-4dp"
+                android:text="Username"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_bio_pro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_pro_uname"
+                android:layout_marginLeft="104dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/iv_pro_pict"
+                android:text="Bio"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_update_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_pro_pict"
+                android:text="Edit Profile"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/btn_update_profile">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </androidx.viewpager.widget.ViewPager>
+
+
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

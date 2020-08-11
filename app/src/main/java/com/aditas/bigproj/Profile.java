@@ -1,7 +1,6 @@
 package com.aditas.bigproj;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 public class Profile extends AppCompatActivity {
