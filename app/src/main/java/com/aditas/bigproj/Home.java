@@ -4,20 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.aditas.bigproj.fragment.AccFragment;
 import com.aditas.bigproj.fragment.FavFragment;
 import com.aditas.bigproj.fragment.HomeFragment;
 import com.aditas.bigproj.fragment.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    //Button btnOut;
-    //FirebaseAuth mAuth;
-    //private FirebaseAuth.AuthStateListener mAuthList;
+    Button btnOut;
+    FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,30 +34,21 @@ public class Home extends AppCompatActivity {
         //inisialisasi BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bn_main);
         //beri listener pada saat item/menu bottomnav terpilih
-        bottomNav.setOnNavigationItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) this);
+        bottomNav.setOnNavigationItemSelectedListener( this);
 
 
-//        btnOut = findViewById(R.id.btn_out);
-//        btnOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intReg = new Intent(Home.this, Regist.class);
-//                startActivity(intReg);
-//            }
-//        });
+        btnOut = findViewById(R.id.btn_out);
+        btnOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intReg = new Intent(Home.this, Regist.class);
+                startActivity(intReg);
+            }
+        });
     }
 
-    //method utk load fragment yg sesuai
-    private boolean loadFragment(Fragment homeFragment) {
-        if(homeFragment != null){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.rv_container, homeFragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
+
 
     //method listener utk logika pemilihan
     //@Override
@@ -76,5 +71,21 @@ public class Home extends AppCompatActivity {
                 break;
         }
         return loadFragment(frag);
+    }
+
+    //method utk load fragment yg sesuai
+    private boolean loadFragment(Fragment homeFragment) {
+        if(homeFragment != null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rv_container, homeFragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

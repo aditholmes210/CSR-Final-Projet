@@ -29,7 +29,7 @@ public class Login extends AppCompatActivity {
     EditText mail, pass;
     Button btnIn;
     TextView tvReg;
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthList;
     private int RC_SIGN_IN = 1;
 
