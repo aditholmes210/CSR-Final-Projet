@@ -50,7 +50,7 @@ public class Login extends AppCompatActivity {
                 FirebaseUser mFireUser = mAuth.getCurrentUser();
                 if(mFireUser != null){
                     Toast.makeText(Login.this, "Access granted", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(Login.this, Home.class);
+                    Intent i = new Intent(Login.this, SetUp.class);
                     startActivity(i);
                 }
                 else{
