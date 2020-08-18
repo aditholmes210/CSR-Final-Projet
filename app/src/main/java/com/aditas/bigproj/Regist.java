@@ -100,15 +100,16 @@ public class Regist extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(str_username) || (TextUtils.isEmpty(str_email) || (TextUtils.isEmpty(str_password)))){
                     Toast.makeText(Regist.this, "All fields are required", Toast.LENGTH_SHORT).show();
-                } else {
-                    str_password.length();
+                } else if (str_password.length() < 6){
                     Toast.makeText(Regist.this, "Password must have at least 6 character", Toast.LENGTH_SHORT).show();
+                } else{
+                    register(str_username, str_email, str_password);
                 }
             }
         });
     }
 
-    private void regist(String uname, String mail, String pass){
+    private void register(final String user, String mail, String pass){
         mAuth.createUserWithEmailAndPassword(mail, pass)
                 .addOnCompleteListener(Regist.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -119,7 +120,7 @@ public class Regist extends AppCompatActivity {
                             ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
                             HashMap<String, Object> hash = new HashMap<>();
                             hash.put("id", userid);
-                            hash.put("username", userid.toLowerCase());
+                            hash.put("username", user.toLowerCase());
                             hash.put("bio", "");
                             hash.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/bigproj-c7b8e.appspot.com/o/blank.webp?alt=media&token=9615cbbe-3ec3-4c26-8645-9f040f0877d3");
 

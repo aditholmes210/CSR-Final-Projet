@@ -34,15 +34,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bn_main"
+    <FrameLayout
+        android:id="@+id/frag_con"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemIconSize="15dp"
-        app:itemIconTint="@color/colorPrimaryDark"
-        app:itemTextColor="@color/colorPrimaryDark"
-        app:menu="@menu/bottomnav"
-        android:background="@color/colorPrimary"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom"/>
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bn_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:itemIconSize="15dp"
+                app:itemIconTint="@color/selector"
+                app:itemTextColor="@color/colorPrimaryDark"
+                app:menu="@menu/bottomnav"
+                android:background="@color/colorPrimary"/>
+        </android.support.design.widget.AppBarLayout>
 
 </RelativeLayout>

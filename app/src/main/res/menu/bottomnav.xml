@@ -10,6 +10,10 @@
         android:title="Search"
         android:icon="@drawable/ic_search_black_24dp"/>
     <item
+        android:id="@+id/nav_add"
+        android:title="Add"
+        android:icon="@drawable/ic_add"/>
+    <item
         android:id="@+id/nav_fav"
         android:title="Favorite"
         android:icon="@drawable/ic_favorite_black_24dp"/>

@@ -65,6 +65,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+        //tanpa username
 //        btnIn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

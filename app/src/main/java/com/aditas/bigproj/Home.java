@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import com.aditas.bigproj.fragment.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Home extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity{
 
     Button btnOut;
     FirebaseAuth mAuth;
@@ -30,11 +31,14 @@ public class Home extends AppCompatActivity implements BottomNavigationView.OnNa
 
 
         //set defaultmya home fragment
-        loadFragment(new HomeFragment());
+//        loadFragment(new HomeFragment());
         //inisialisasi BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bn_main);
         //beri listener pada saat item/menu bottomnav terpilih
-        bottomNav.setOnNavigationItemSelectedListener( this);
+        bottomNav.setOnNavigationItemSelectedListener( navigationItemSelectedListener);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rv_container, new HomeFragment())
+                .commit();
 
 
         btnOut = findViewById(R.id.btn_out);
@@ -49,43 +53,52 @@ public class Home extends AppCompatActivity implements BottomNavigationView.OnNa
     }
 
 
-
-    //method listener utk logika pemilihan
-    //@Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item){
-        Fragment frag = null;
-        switch (item.getItemId()){
-            case R.id.nav_home:
-                frag = new HomeFragment();
-                break;
-            case R.id.nav_src:
-                frag = new SearchFragment();
-                break;
-            case R.id.nav_fav:
-                frag = new FavFragment();
-                break;
-            case R.id.nav_acc:
-                frag = new AccFragment();
-                break;
-            default:
-                break;
-        }
-        return loadFragment(frag);
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                //method listener utk logika pemilihan
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item){
+                    Fragment frag = null;
+                    switch (item.getItemId()){
+                        case R.id.nav_home:
+                            frag = new HomeFragment();
+                            break;
+                        case R.id.nav_src:
+                            frag = new SearchFragment();
+                            break;
+                        case R.id.nav_add:
+                            frag = null;
+                            startActivity(new Intent (Home.this, Post.class));
+                            break;
+                        case R.id.nav_fav:
+                            frag = new FavFragment();
+                            break;
+                        case R.id.nav_acc:
+                            SharedPreferences.Editor edit = getSharedPreferences("PREF", MODE_PRIVATE).edit();
+                            edit.putString("profileid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            edit.apply();;
+                            frag = new AccFragment();
+                            break;
+                        default:
+                            break;
+                    }
+                    if(frag != null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.rv_container, frag)
+                                .commit();
+                    }
+                    return true;
+                    //return loadFragment(frag);
+                }
 
     //method utk load fragment yg sesuai
-    private boolean loadFragment(Fragment homeFragment) {
-        if(homeFragment != null){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.rv_container, homeFragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
+//    private boolean loadFragment(Fragment homeFragment) {
+//        if(homeFragment != null){
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.rv_container, homeFragment)
+//                    .commit();
+//            return true;
+//        }
+//        return false;
+    };
 }
