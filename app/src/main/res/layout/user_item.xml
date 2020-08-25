@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_acc"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/blank"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/img_acc"
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/tvUname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/tvFname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fullname"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_fol"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="411dp"
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone" />
+
+</RelativeLayout>

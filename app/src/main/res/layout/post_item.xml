@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_prof"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"/>
+            <TextView
+                android:id="@+id/tv_usn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/post_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+            <ImageView
+                android:id="@+id/like"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_favorite_black_24dp"/>
+            <ImageView
+                android:id="@+id/com"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_comment"
+                android:layout_toEndOf="@+id/like"
+                android:layout_marginStart="10dp"/>
+            <ImageView
+                android:id="@+id/save"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_mark"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/pub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:text="View All 100 Comments"
+            android:textColor="@color/colorAccent"/>
+    </LinearLayout>
+
+</RelativeLayout>
