@@ -79,9 +79,9 @@ public class Post extends AppCompatActivity {
     }
 
     private void upImg(){
-        final ProgressDialog progDial = new ProgressDialog(this);
-        ProgressDialog.setMessage("Posting");
-        ProgressDialog.show();
+//        ProgressDialog progDial = new ProgressDialog(this);
+//        ProgressDialog.setMessage("Posting");
+//        ProgressDialog.show();
 
         if(imgUri != null){
             final StorageReference fileref = strRef.child(System.currentTimeMillis()
@@ -113,7 +113,7 @@ public class Post extends AppCompatActivity {
                         map.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                         ref.child(postId).setValue(map);
-                        progDial.dismiss();
+                        //progDial.dismiss();
                         startActivity(new Intent(Post.this, Home.class));
                         finish();
                     } else{
