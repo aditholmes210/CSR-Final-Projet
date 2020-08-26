@@ -36,10 +36,22 @@ public class Home extends AppCompatActivity{
         BottomNavigationView bottomNav = findViewById(R.id.bn_main);
         //beri listener pada saat item/menu bottomnav terpilih
         bottomNav.setOnNavigationItemSelectedListener( navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rv_container, new HomeFragment())
-                .commit();
 
+        Bundle intn = getIntent().getExtras();
+        if(intn != null){
+            String publish = intn.getString("publishid");
+            SharedPreferences.Editor etr = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+            etr.putString("profileid", publish);
+            etr.apply();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rv_container, new AccFragment())
+                    .commit();
+        } else{
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rv_container, new HomeFragment())
+                    .commit();
+        }
 
         btnOut = findViewById(R.id.btn_out);
         btnOut.setOnClickListener(new View.OnClickListener() {

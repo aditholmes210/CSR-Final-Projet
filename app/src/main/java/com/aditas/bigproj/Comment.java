@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.aditas.bigproj.Adapter.ComAdapt;
+import com.aditas.bigproj.Model.Com;
 import com.aditas.bigproj.Model.User;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,9 +26,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Comment extends AppCompatActivity {
+
+    private RecyclerView recyV;
+    private ComAdapt cAdapt;
+    private List<Com> comList;
 
     EditText addCom;
     ImageView imgProf;
@@ -49,6 +59,14 @@ public class Comment extends AppCompatActivity {
             }
         });
 
+        recyV = findViewById(R.id.rec_view);
+        recyV.setHasFixedSize(true);
+        LinearLayoutManager lineMgr = new LinearLayoutManager(this);
+        recyV.setLayoutManager(lineMgr);
+        comList = new ArrayList<>();
+        cAdapt = new ComAdapt(this, comList);
+        recyV.setAdapter(cAdapt);
+
         addCom = findViewById(R.id.add_com);
         imgProf = findViewById(R.id.img_prof);
         post = findViewById(R.id.post);
@@ -68,6 +86,7 @@ public class Comment extends AppCompatActivity {
             }
         });
         getImg();
+        readCom();
     }
 
     private void addComs(){
@@ -88,6 +107,27 @@ public class Comment extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User usr = dataSnapshot.getValue(User.class);
                 Glide.with(getApplicationContext()).load(usr.getImgurl()).into(imgProf);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void readCom(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Comments")
+                .child(postid);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                comList.clear();
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    Com com = snap.getValue(Com.class);
+                    comList.add(com);
+                }
+                cAdapt.notifyDataSetChanged();
             }
 
             @Override
