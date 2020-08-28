@@ -2,6 +2,7 @@ package com.aditas.bigproj.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aditas.bigproj.Comment;
 import com.aditas.bigproj.Model.Posm;
 import com.aditas.bigproj.Model.User;
 import com.aditas.bigproj.R;
+import com.aditas.bigproj.fragment.AccFragment;
+import com.aditas.bigproj.fragment.DetailFragment;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,6 +66,54 @@ public class PostAdapt extends RecyclerView.Adapter<PostAdapt.ViewHolder>{
         nrLikes(holder.likes, posm.getPostid());
         getComs(posm.getPostid(), holder.coms);
         isSaved(posm.getPostid(), holder.save);
+
+        holder.imgProf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor etr = mCon.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                etr.putString("profileid", posm.getPublish());
+                etr.apply();
+
+                ((FragmentActivity)mCon).getSupportFragmentManager().beginTransaction().replace(R.id.frag_con,
+                        new AccFragment()).commit();
+            }
+        });
+
+        holder.user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor etr = mCon.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                etr.putString("profileid", posm.getPublish());
+                etr.apply();
+
+                ((FragmentActivity)mCon).getSupportFragmentManager().beginTransaction().replace(R.id.frag_con,
+                        new AccFragment()).commit();
+            }
+        });
+
+        holder.publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor etr = mCon.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                etr.putString("profileid", posm.getPublish());
+                etr.apply();
+
+                ((FragmentActivity)mCon).getSupportFragmentManager().beginTransaction().replace(R.id.frag_con,
+                        new AccFragment()).commit();
+            }
+        });
+
+        holder.postImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor etr = mCon.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                etr.putString("postid", posm.getPostid());
+                etr.apply();
+
+                ((FragmentActivity)mCon).getSupportFragmentManager().beginTransaction().replace(R.id.frag_con,
+                        new DetailFragment()).commit();
+            }
+        });
 
         holder.save.setOnClickListener(new View.OnClickListener() {
             @Override

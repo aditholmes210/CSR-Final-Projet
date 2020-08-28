@@ -2,16 +2,19 @@ package com.aditas.bigproj.Adapter;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aditas.bigproj.Model.Posm;
 import com.aditas.bigproj.R;
+import com.aditas.bigproj.fragment.DetailFragment;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -35,8 +38,20 @@ public class FotoAdapt extends RecyclerView.Adapter<FotoAdapt.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
-        Posm posm = mPosm.get(pos);
+        final Posm posm = mPosm.get(pos);
         Glide.with(con).load(posm.getPostimg()).into(holder.postImg);
+
+        holder.postImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor etr = con.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                etr.putString("postid", posm.getPostid());
+                etr.apply();
+
+                ((FragmentActivity)con).getSupportFragmentManager().beginTransaction().replace(R.id.frag_con,
+                        new DetailFragment()).commit();
+            }
+        });
     }
 
     @Override
