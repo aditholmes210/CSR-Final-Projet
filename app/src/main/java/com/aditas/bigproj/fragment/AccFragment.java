@@ -49,6 +49,11 @@ public class AccFragment extends Fragment {
     FotoAdapt fAdapt;
     List<Posm> posList;
 
+    private List<String> mySave;
+    RecyclerView recVSave;
+    FotoAdapt fAdaptSave;
+    List<Posm> posListSave;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class AccFragment extends Fragment {
         myPic = v.findViewById(R.id.my_pics);
         savePic = v.findViewById(R.id.my_save);
 
-        recV = v.findViewById(R.id.rec_view);
+        recV = v.findViewById(R.id.recP);
         recV.setHasFixedSize(true);
         LinearLayoutManager layMgr = new GridLayoutManager(getContext(), 3);
         recV.setLayoutManager(layMgr);
@@ -77,10 +82,22 @@ public class AccFragment extends Fragment {
         fAdapt = new FotoAdapt(getContext(), posList);
         recV.setAdapter(fAdapt);
 
+        recVSave = v.findViewById(R.id.recM);
+        recVSave.setHasFixedSize(true);
+        LinearLayoutManager layMgrS = new GridLayoutManager(getContext(), 3);
+        recVSave.setLayoutManager(layMgrS);
+        posListSave = new ArrayList<>();
+        fAdaptSave = new FotoAdapt(getContext(), posListSave);
+        recVSave.setAdapter(fAdaptSave);
+
+        recV.setVisibility(View.VISIBLE);
+        recVSave.setVisibility(View.GONE);
+
         userInfo();
         getFollow();
         getNrPosts();
         myPic();
+        mySave();
 
         if (profid.equals(fUser.getUid())){
             editProf.setText("Edit Profile");
@@ -106,6 +123,21 @@ public class AccFragment extends Fragment {
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(profid)
                             .child("followers").child(fUser.getUid()).removeValue();
                 }
+            }
+        });
+        myPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recV.setVisibility(View.VISIBLE);
+                recVSave.setVisibility(View.GONE);
+            }
+        });
+
+        savePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recV.setVisibility(View.GONE);
+                recVSave.setVisibility(View.VISIBLE);
             }
         });
 
@@ -222,6 +254,50 @@ public class AccFragment extends Fragment {
                 }
                 Collections.reverse(posList);
                 fAdapt.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void mySave(){
+        mySave = new ArrayList<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Saves")
+                .child(fUser.getUid());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    mySave.add(snap.getKey());
+                }
+                readSave();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void readSave(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                posListSave.clear();
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    Posm posm = snap.getValue(Posm.class);
+                    for (String id : mySave){
+                        if (posm.getPostid().equals(id)){
+                            posListSave.add(posm);
+                        }
+                    }
+                }
+                fAdaptSave.notifyDataSetChanged();
             }
 
             @Override
