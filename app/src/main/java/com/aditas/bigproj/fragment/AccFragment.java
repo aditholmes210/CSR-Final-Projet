@@ -1,6 +1,7 @@
 package com.aditas.bigproj.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aditas.bigproj.Adapter.FotoAdapt;
+import com.aditas.bigproj.EditProfile;
 import com.aditas.bigproj.Model.Posm;
 import com.aditas.bigproj.Model.User;
 import com.aditas.bigproj.R;
@@ -100,7 +102,7 @@ public class AccFragment extends Fragment {
         mySave();
 
         if (profid.equals(fUser.getUid())){
-            editProf.setText("Edit Profile");
+            editProf.setText("Edit EditProfile");
         } else {
             checkFollow();
             savePic.setVisibility(View.GONE);
@@ -110,8 +112,8 @@ public class AccFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String btn = editProf.getText().toString();
-                if(btn.equals("Edit Profile")){
-                    //go to profile
+                if(btn.equals("Edit EditProfile")){
+                    startActivity(new Intent(getContext(), EditProfile.class));
                 } else if (btn.equals("follow")){
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(fUser.getUid())
                             .child("following").child(profid).setValue(true);

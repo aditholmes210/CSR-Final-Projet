@@ -89,7 +89,7 @@
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_below="@+id/iv_pro_pict"-->
-                <!--android:text="Edit Profile"/>-->
+                <!--android:text="Edit EditProfile"/>-->
 
             <!--<androidx.viewpager.widget.ViewPager-->
                 <!--android:id="@+id/view_pager"-->
