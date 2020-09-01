@@ -15,7 +15,6 @@
         <activity android:name=".Comment"></activity>
         <activity android:name=".Post" />
         <activity android:name=".EditProfile" />
-        <activity android:name=".SetUp" />
         <activity android:name=".Home" />
         <activity android:name=".Regist" />
         <activity

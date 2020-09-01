@@ -15,14 +15,20 @@ import com.aditas.bigproj.fragment.AccFragment;
 import com.aditas.bigproj.fragment.FavFragment;
 import com.aditas.bigproj.fragment.HomeFragment;
 import com.aditas.bigproj.fragment.SearchFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Home extends AppCompatActivity{
 
     Button btnOut;
     FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthList;
+    FirebaseUser firebaseUser;
+    GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,15 @@ public class Home extends AppCompatActivity{
 //        loadFragment(new HomeFragment());
         //inisialisasi BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bn_main);
-        //beri listener pada saat item/menu bottomnav terpilih
+        //beri listener pada saat item/menu nav terpilih
         bottomNav.setOnNavigationItemSelectedListener( navigationItemSelectedListener);
+
+        mAuth = FirebaseAuth.getInstance();
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(String.valueOf(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
 
         Bundle intn = getIntent().getExtras();
         if(intn != null){
@@ -53,15 +66,15 @@ public class Home extends AppCompatActivity{
                     .commit();
         }
 
-        btnOut = findViewById(R.id.btn_out);
-        btnOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intReg = new Intent(Home.this, Regist.class);
-                startActivity(intReg);
-            }
-        });
+//        btnOut = findViewById(R.id.btn_out);
+//        btnOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FirebaseAuth.getInstance().signOut();
+//                Intent intReg = new Intent(Home.this, Regist.class);
+//                startActivity(intReg);
+//            }
+//        });
     }
 
 
@@ -100,17 +113,14 @@ public class Home extends AppCompatActivity{
                                 .commit();
                     }
                     return true;
-                    //return loadFragment(frag);
                 }
-
-    //method utk load fragment yg sesuai
-//    private boolean loadFragment(Fragment homeFragment) {
-//        if(homeFragment != null){
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.rv_container, homeFragment)
-//                    .commit();
-//            return true;
-//        }
-//        return false;
     };
+
+    private void updateUI(FirebaseUser user){
+        if (user==null){
+            Intent intent = new Intent(getApplicationContext(),Login.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 }

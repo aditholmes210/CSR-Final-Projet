@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aditas.bigproj.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
@@ -32,6 +34,12 @@ public class Regist extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference ref;
     ProgressDialog pd;
+    FirebaseFirestore fStore;
+    FirebaseUser fUser;
+
+    String str_username = uname.getText().toString();
+    String str_email = mail.getText().toString();
+    String str_password = pass.getText().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,7 @@ public class Regist extends AppCompatActivity {
         setContentView(R.layout.activity_regist);
 
         mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         uname = findViewById(R.id.et_unam);
         mail = findViewById(R.id.et_mail);
         pass = findViewById(R.id.et_pass);
@@ -94,9 +103,9 @@ public class Regist extends AppCompatActivity {
                 pd.setMessage("Cotto Matte Kudasai...");
                 pd.show();
 
-                String str_username = uname.getText().toString();
-                String str_email = mail.getText().toString();
-                String str_password = pass.getText().toString();
+//                String str_username = uname.getText().toString();
+//                String str_email = mail.getText().toString();
+//                String str_password = pass.getText().toString();
 
                 if (TextUtils.isEmpty(str_username) || (TextUtils.isEmpty(str_email) || (TextUtils.isEmpty(str_password)))){
                     Toast.makeText(Regist.this, "All fields are required", Toast.LENGTH_SHORT).show();
@@ -117,29 +126,55 @@ public class Regist extends AppCompatActivity {
                         if(task.isSuccessful()){
                             FirebaseUser fUser = mAuth.getCurrentUser();
                             String userid = fUser.getUid();
-                            ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
-                            HashMap<String, Object> hash = new HashMap<>();
-                            hash.put("id", userid);
-                            hash.put("username", user.toLowerCase());
-                            hash.put("bio", "");
-                            hash.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/bigproj-c7b8e.appspot.com/o/blank.webp?alt=media&token=9615cbbe-3ec3-4c26-8645-9f040f0877d3");
+                            String urlImg = "https://firebasestorage.googleapis.com/v0/b/bigproj-c7b8e.appspot.com/o/blank.webp?alt=media&token=9615cbbe-3ec3-4c26-8645-9f040f0877d3";
+                            User data = new User(userid, str_username, str_email, urlImg, str_password);
+//                            ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
+//                            HashMap<String, Object> hash = new HashMap<>();
+//                            hash.put("id", userid);
+//                            hash.put("username", user.toLowerCase());
+//                            hash.put("fullname", user.toLowerCase());
+//                            hash.put("bio", "");
+//                            hash.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/bigproj-c7b8e.appspot.com/o/blank.webp?alt=media&token=9615cbbe-3ec3-4c26-8645-9f040f0877d3");
 
-                            ref.setValue(hash).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        pd.dismiss();
-                                        Intent i = new Intent(Regist.this, Home.class);
-                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(i);
-                                    }
-                                }
-                            });
+//                            ref.setValue(hash).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if(task.isSuccessful()){
+//                                        pd.dismiss();
+//                                        Intent i = new Intent(Regist.this, Home.class);
+//                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(i);
+//                                    }
+//                                }
+//                            });
+                            fStore = FirebaseFirestore.getInstance();
+                            fStore.collection("users").document(userid).set(data)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(Regist.this, "Data Tersimpan di Database", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                            onAuthSuccess(task.getResult().getUser());
                         }else{
                             pd.dismiss();
                             Toast.makeText(Regist.this, "You can't register with this email/password", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String uname = usernameFromEmail(user.getEmail());
+        startActivity(new Intent(Regist.this, Login.class));
+        finish();
+    }
+
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
     }
 }

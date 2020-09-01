@@ -28,6 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -62,21 +68,16 @@ public class EditProfile extends AppCompatActivity {
 
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         upRef = FirebaseStorage.getInstance().getReference("uploads");
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
-                .child(fUser.getUid());
-        ref.addValueEventListener(new ValueEventListener() {
+        DocumentReference ref = FirebaseFirestore.getInstance().collection("users")
+                .document(fUser.getUid());
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User usr = dataSnapshot.getValue(User.class);
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                User usr = value.toObject(User.class);
                 full.setText(usr.getFname());
                 user.setText(usr.getUname());
                 bio.setText(usr.getBio());
                 Glide.with(getApplicationContext()).load(usr.getImgurl()).into(imgProf);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -112,7 +113,8 @@ public class EditProfile extends AppCompatActivity {
             public void onClick(View v) {
                 update(full.getText().toString(),
                         user.getText().toString(),
-                        bio.getText().toString());
+                        bio.getText().toString()
+                );
             }
         });
     }
@@ -163,7 +165,7 @@ public class EditProfile extends AppCompatActivity {
                                 .child(fUser.getUid());
 
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("iamgeurl", ""+myUrl);
+                        map.put("imageurl", ""+myUrl);
                         ref.updateChildren(map);
                         pd.dismiss();
                     } else {

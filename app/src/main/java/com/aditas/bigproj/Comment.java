@@ -1,6 +1,7 @@
 package com.aditas.bigproj;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,6 +19,8 @@ import com.aditas.bigproj.Adapter.ComAdapt;
 import com.aditas.bigproj.Model.Com;
 import com.aditas.bigproj.Model.User;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,10 +28,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Comment extends AppCompatActivity {
 
@@ -39,8 +49,7 @@ public class Comment extends AppCompatActivity {
     EditText addCom;
     ImageView imgProf;
     TextView post;
-    String postid;
-    String publishid;
+    String postid, publishid;
     FirebaseUser fUser;
 
     @Override
@@ -70,9 +79,9 @@ public class Comment extends AppCompatActivity {
         addCom = findViewById(R.id.add_com);
         imgProf = findViewById(R.id.img_prof);
         post = findViewById(R.id.post);
-        Intent intn = getIntent();
-        postid = intn.getStringExtra("postid");
-        publishid = intn.getStringExtra("publishid");
+        Intent i = getIntent();
+        postid = i.getStringExtra("postid");
+        publishid = i.getStringExtra("publishid");
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         post.setOnClickListener(new View.OnClickListener() {
@@ -90,13 +99,24 @@ public class Comment extends AppCompatActivity {
     }
 
     private void addComs(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Comments")
-                .child(postid);
-        HashMap<String, Object> hash = new HashMap<>();
-        hash.put("comment", addCom.getText().toString());
-        hash.put("publish", fUser.getUid());
-        ref.push().setValue(hash);
-        addCom.setText("");
+        String text = addCom.getText().toString();
+        String mCom = fUser.getUid();
+        Map<String,Object> map = new HashMap<>();
+        map.put("text",addCom.getText().toString());
+        map.put("mrComment",fUser.getUid());
+        Com com = new Com(text, mCom);
+        FirebaseFirestore.getInstance()
+                .collection("comments")
+                .document(postid)
+                .collection(postid)
+                .add(com)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Toast.makeText(Comment.this, "Comment Berhasil Di Kirim", Toast.LENGTH_SHORT).show();
+                        addCom.setText("");
+                    }
+                });
     }
 
     private void getImg(){
@@ -117,23 +137,17 @@ public class Comment extends AppCompatActivity {
     }
 
     private void readCom(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Comments")
-                .child(postid);
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                comList.clear();
-                for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    Com com = snap.getValue(Com.class);
-                    comList.add(com);
-                }
-                cAdapt.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        FirebaseFirestore.getInstance().collection("comments").document(postid).collection(postid)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        assert value != null;
+                        for (DocumentSnapshot snapshot : value){
+                            Com com = snapshot.toObject(Com.class);
+                            comList.add(com);
+                        }
+                        cAdapt.notifyDataSetChanged();
+                    }
+                });
     }
 }

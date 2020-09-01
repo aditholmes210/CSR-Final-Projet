@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class Post extends AppCompatActivity {
@@ -64,6 +67,7 @@ public class Post extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 upImg();
+                Toast.makeText(Post.this, "Upload Success", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -72,10 +76,21 @@ public class Post extends AppCompatActivity {
                 .start(Post.this);
     }
 
-    private String getFileExtension(Uri uri){
-        ContentResolver resolv = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(resolv.getType(uri));
+    private String getFileExtension(Context con, Uri uri){
+        String extension;
+
+        //Check uri format to avoid null
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            //If scheme is a content
+            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+            extension = mime.getExtensionFromMimeType(con.getContentResolver().getType(uri));
+        } else {
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
+
+        }
+        return extension;
     }
 
     private void upImg(){
@@ -85,7 +100,7 @@ public class Post extends AppCompatActivity {
 
         if(imgUri != null){
             final StorageReference fileref = strRef.child(System.currentTimeMillis()
-            +"."+ getFileExtension(imgUri));
+            +"."+ getFileExtension(getApplicationContext(), imgUri));
 
             upTask = fileref.putFile(imgUri);
             upTask.continueWithTask(new Continuation() {
@@ -124,6 +139,16 @@ public class Post extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(Post.this, ""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }).addOnCanceledListener(new OnCanceledListener() {
+                @Override
+                public void onCanceled() {
+                    Toast.makeText(Post.this, "Cancel", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(Post.this, "Error : " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
